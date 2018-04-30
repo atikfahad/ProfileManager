@@ -102,6 +102,7 @@ public class LocalService extends Service implements SensorEventListener {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if(mLight != null){
             mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
