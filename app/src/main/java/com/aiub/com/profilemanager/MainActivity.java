@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     LocalService mService;
     boolean mBound = false;
+    boolean isFirst = true;
+    private Intent intent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
      @Override
     protected void onStart(){
         super.onStart();
-     }
-     @Override
-    protected void onStop(){
-        super.onStop();
-     }
-     public void startBoundService(View v){
          NotificationManager notificationManager =
                  (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -42,20 +39,33 @@ public class MainActivity extends AppCompatActivity {
 
              startActivity(intent);
          }
-         Intent intent = new Intent(this, LocalService.class);
+         intent = new Intent(this, LocalService.class);
+         if(isFirst){
+            startService(intent);
+            isFirst = false;
+         }
          bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-         //Intent intent2 = new Intent(this, LocalService.class);
-         //bindService(intent2, mConnection, Context.BIND_AUTO_CREATE);
-         //mService.profileManager();
-         Toast.makeText(this, "Bound Service Started", Toast.LENGTH_SHORT).show();
+         Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
+     }
+     @Override
+    protected void onStop(){
+        super.onStop();
+         if(mBound) {
+             unbindService(mConnection);
+             mBound = false;
+             Toast.makeText(this, "Service Unbounded", Toast.LENGTH_SHORT).show();
+         }
+     }
+     public void startBoundService(View v){
+
      }
      public void stopBoundService(View v){
-         if(mService != null)
-            unbindService(mConnection);
-         else
-             Toast.makeText(this, "Your Service is not started yet.", Toast.LENGTH_SHORT).show();
-         mBound = false;
-         Toast.makeText(this, "Bound Service Stopped", Toast.LENGTH_SHORT).show();
+         if(intent != null){
+            stopService(intent);
+            return;
+         }
+         Toast.makeText(this, "Your Service is not started yet.", Toast.LENGTH_SHORT).show();
+
      }
      public void testBoundServiceRunning(View v){
          if(mBound){
@@ -70,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
              mService = binder.getService();
              mBound = true;
          }
-
          @Override
          public void onServiceDisconnected(ComponentName componentName) {
              mBound = false;

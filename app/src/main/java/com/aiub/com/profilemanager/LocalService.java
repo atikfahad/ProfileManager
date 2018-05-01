@@ -74,6 +74,7 @@ public class LocalService extends Service implements SensorEventListener {
         }
         else if(ifShaking && !ifLight) {
             myAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            myAudioManager.setStreamVolume(AudioManager.STREAM_RING, myAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING)/2, 0);
             Log.i("Condition 2", "NORMAL");
         }
 
@@ -91,19 +92,6 @@ public class LocalService extends Service implements SensorEventListener {
     }
     @Override
     public IBinder onBind(Intent intent) {
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if(mLight != null){
-            mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-        if(mProximity != null){
-            mSensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-        if(mAcceleration != null)
-            mSensorManager.registerListener(this, mAcceleration, SensorManager.SENSOR_DELAY_NORMAL);
         return mBinder;
     }
     public int getRandomNumber(){
@@ -123,4 +111,27 @@ public class LocalService extends Service implements SensorEventListener {
 //        }
 //    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if(mLight != null){
+            mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if(mProximity != null){
+            mSensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if(mAcceleration != null)
+            mSensorManager.registerListener(this, mAcceleration, SensorManager.SENSOR_DELAY_NORMAL);
+        Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
+
+        return START_STICKY;
+    }
+    @Override
+    public void onDestroy() {
+        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
+    }
 }
