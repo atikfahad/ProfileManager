@@ -18,5 +18,6 @@
         </activity>
         <service android:name=".LocalService"/>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
 </manifest>
