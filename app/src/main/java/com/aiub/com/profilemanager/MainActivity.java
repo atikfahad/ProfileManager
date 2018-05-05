@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             isFirst = false;
          }
          bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-         Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
+         //Toast.makeText(this, "Service Bounded", Toast.LENGTH_SHORT).show();
      }
      @Override
     protected void onStop(){
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
          if(mBound) {
              unbindService(mConnection);
              mBound = false;
-             Toast.makeText(this, "Service Unbounded", Toast.LENGTH_SHORT).show();
+             //Toast.makeText(this, "Service Unbounded", Toast.LENGTH_SHORT).show();
          }
      }
      public void startBoundService(View v){
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             stopService(intent);
             return;
          }
-         Toast.makeText(this, "Your Service is not started yet.", Toast.LENGTH_SHORT).show();
+         //Toast.makeText(this, "Your Service is not started yet.", Toast.LENGTH_SHORT).show();
 
      }
      public void testBoundServiceRunning(View v){

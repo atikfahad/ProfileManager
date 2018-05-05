@@ -51,7 +51,7 @@ public class LocalService extends Service implements SensorEventListener {
         }
         if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
             float shakingX = sensorEvent.values[0];
-            if(shakingX < 0 && shakingX >0.6)
+            if(shakingX < -1.8 && shakingX > 1)
                 ifShaking = false;
             else
                 ifShaking = true;
@@ -126,12 +126,12 @@ public class LocalService extends Service implements SensorEventListener {
         }
         if(mAcceleration != null)
             mSensorManager.registerListener(this, mAcceleration, SensorManager.SENSOR_DELAY_NORMAL);
-        Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
 
         return START_STICKY;
     }
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
     }
 }
